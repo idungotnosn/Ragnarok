@@ -1,0 +1,132 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<everest-table-mappings>
+  <address-table-mappings>
+    <mapping>
+      <amazon-column-ids>
+        <id>
+          recipient-name
+        </id>
+      </amazon-column-ids>
+      <everest-column-id>
+      </everest-column-id>
+      <type>string</type>
+    </mapping>
+
+    <mapping>
+      <amazon-column-ids>
+        <id>
+          ship-phone-number
+        </id>
+      </amazon-column-ids>
+      <everest-column-id>
+      </everest-column-id>
+      <type>string</type>
+    </mapping>
+
+    <mapping>
+      <amazon-column-ids>
+        <id>
+          ship-address-1
+        </id>
+        <id>
+          ship-address-2
+        </id>
+        <id>
+          ship-address-3
+        </id>
+      </amazon-column-ids>
+      <everest-column-id>
+      </everest-column-id>
+      <type>string</type>
+    </mapping>
+
+    <mapping>
+      <amazon-column-ids>
+        <id>
+          ship-postal-code
+        </id>
+      </amazon-column-ids>
+      <everest-column-id>
+      </everest-column-id>
+      <type>string</type>
+    </mapping>
+    
+  </address-table-mappings>
+  <customer-table-mappings>
+    
+  </customer-table-mappings>
+  <order-table-mappings>
+    
+    <mapping>
+      <amazon-column-ids>
+        <id>
+          order-id
+        </id>
+      </amazon-column-ids>
+      <everest-column-id>
+      </everest-column-id>
+      <type>string</type>
+      <aggregate>false</aggregate>
+    </mapping>
+
+    <mapping>
+      <amazon-column-ids>
+        <id>
+          shipping-price
+        </id>
+      </amazon-column-ids>
+      <everest-column-id>
+      </everest-column-id>
+      <type>decimal</type>
+      <aggregate>true</aggregate>
+    </mapping>
+
+    <mapping>
+      <amazon-column-ids>
+        <id>
+          ship-service-level
+        </id>
+      </amazon-column-ids>
+      <everest-column-id>
+      </everest-column-id>
+      <type>string</type>
+      <aggregate>false</aggregate>
+    </mapping>
+
+
+    
+  </order-table-mappings>
+  <order-item-mappings>
+    
+    <mapping>
+      <amazon-column-ids>
+        <id>
+          SKU
+        </id>
+      </amazon-column-ids>
+      <everest-column-id>
+      </everest-column-id>
+    </mapping>
+
+    <mapping>
+      <amazon-column-ids>
+        <id>
+          product-name
+        </id>
+      </amazon-column-ids>
+      <everest-column-id>
+      </everest-column-id>
+    </mapping>
+
+    <mapping>
+      <amazon-column-ids>
+        <id>
+          quantity-purchased
+        </id>
+      </amazon-column-ids>
+      <everest-column-id>
+      </everest-column-id>
+    </mapping>
+    
+  </order-item-mappings>
+</everest-table-mappings>
