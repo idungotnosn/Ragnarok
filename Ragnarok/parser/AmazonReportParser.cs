@@ -13,18 +13,17 @@ namespace Ragnarok
 {
     class AmazonReportParser
     {
-        public static List<AmazonOrder> parseOrders(Stream reportStream)
+        public static ICollection<AmazonOrder> parseOrderListFromReport(Stream reportStream)
         {
             ParsingRulesInfo parseRules = getParsingRulesInfo();
             using (StreamReader reader = new StreamReader(reportStream))
             {
-                String[] headerNames =  reader.ReadLine().Split('\t');
-                ICollection<AmazonOrder> orders = getAmazonOrdersFromStream(parseRules, headerNames, reader);
-                orders.ToString();
-                Console.ReadLine();
-            }            
-
-            return null;
+                if (reader.Peek() >= 0) { 
+                    String[] headerNames =  reader.ReadLine().Split('\t');
+                    return getAmazonOrdersFromStream(parseRules, headerNames, reader);
+                }
+            }
+            return new List<AmazonOrder>();
         }
 
         private static ICollection<AmazonOrder> getAmazonOrdersFromStream(ParsingRulesInfo parsingRules, String[] headerNames, StreamReader reader)
@@ -83,7 +82,6 @@ namespace Ragnarok
 
         private static ParsingRulesInfo getParsingRulesInfo()
         {
-            // Read the parsing rules from the AmazonColumnMappings.xml file
             ParsingRulesInfo result = new ParsingRulesInfo();
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.LoadXml(File.ReadAllText("config/AmazonColumnMappings.xml"));
@@ -93,12 +91,9 @@ namespace Ragnarok
                 String orderItemSpecific = row.SelectSingleNode("order-item-specific").InnerText;
                 String identifier = row.SelectSingleNode("identifier").InnerText;
                 String type = row.SelectSingleNode("type").InnerText;
-                //Console.WriteLine("Row name: " + columnName + "\torderItemSpecific: " + orderItemSpecific + "\ttype: " + type);
                 ParsingRule parsingRule = new ParsingRule(columnName, type, orderItemSpecific.Equals("true"), identifier.Equals("true"));
                 result.addParsingRule(parsingRule);
             }
-
-            //Console.ReadLine();
             return result;
         }
 

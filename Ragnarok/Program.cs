@@ -18,9 +18,9 @@ namespace Ragnarok
 
         public static void testAmazonReportParser()
         {
-            using (FileStream fs = File.OpenRead("testdata/reportexample.txt"))
+            using (FileStream fs = File.OpenRead("testdata/blank.txt"))
             {
-                AmazonReportParser.parseOrders(fs);
+                AmazonReportParser.parseOrderListFromReport(fs);
             }
 
         }
