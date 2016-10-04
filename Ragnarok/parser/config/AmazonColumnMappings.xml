@@ -2,76 +2,91 @@
 <amazon-order-mappings>
   <amazon-column-list>
     <amazon-column>
+      <identifier>true</identifier>
       <amazon-column-name>order-id</amazon-column-name>
       <order-item-specific>false</order-item-specific>
       <type>string</type>
     </amazon-column>
     <amazon-column>
+      <identifier>false</identifier>
       <amazon-column-name>sku</amazon-column-name>
       <order-item-specific>true</order-item-specific>
       <type>string</type>
     </amazon-column>
     <amazon-column>
+      <identifier>false</identifier>
       <amazon-column-name>product-name</amazon-column-name>
       <order-item-specific>true</order-item-specific>
       <type>string</type>
     </amazon-column>
     <amazon-column>
+      <identifier>false</identifier>
       <amazon-column-name>quantity-purchased</amazon-column-name>
       <order-item-specific>true</order-item-specific>
       <type>integer</type>
     </amazon-column>
     <amazon-column>
+      <identifier>false</identifier>
       <amazon-column-name>shipping-price</amazon-column-name>
       <order-item-specific>true</order-item-specific>
       <type>decimal</type>
     </amazon-column>
     <amazon-column>
+      <identifier>false</identifier>
       <amazon-column-name>ship-service-level</amazon-column-name>
       <order-item-specific>false</order-item-specific>
       <type>string</type>
     </amazon-column>
     <amazon-column>
+      <identifier>false</identifier>
       <amazon-column-name>recipient-name</amazon-column-name>
       <order-item-specific>false</order-item-specific>
       <type>string</type>
     </amazon-column>
     <amazon-column>
+      <identifier>false</identifier>
       <amazon-column-name>ship-phone-number</amazon-column-name>
       <order-item-specific>false</order-item-specific>
       <type>string</type>
     </amazon-column>
     <amazon-column>
+      <identifier>false</identifier>
       <amazon-column-name>ship-address-1</amazon-column-name>
       <order-item-specific>false</order-item-specific>
       <type>string</type>
     </amazon-column>
     <amazon-column>
+      <identifier>false</identifier>
       <amazon-column-name>ship-address-2</amazon-column-name>
       <order-item-specific>false</order-item-specific>
       <type>string</type>
     </amazon-column>
     <amazon-column>
+      <identifier>false</identifier>
       <amazon-column-name>ship-address-3</amazon-column-name>
       <order-item-specific>false</order-item-specific>
       <type>string</type>
     </amazon-column>
     <amazon-column>
+      <identifier>false</identifier>
       <amazon-column-name>ship-city</amazon-column-name>
       <order-item-specific>false</order-item-specific>
       <type>string</type>
     </amazon-column>
     <amazon-column>
+      <identifier>false</identifier>
       <amazon-column-name>ship-state</amazon-column-name>
       <order-item-specific>false</order-item-specific>
       <type>string</type>
     </amazon-column>
     <amazon-column>
+      <identifier>false</identifier>
       <amazon-column-name>ship-postal-code</amazon-column-name>
       <order-item-specific>false</order-item-specific>
       <type>string</type>
     </amazon-column>
     <amazon-column>
+      <identifier>false</identifier>
       <amazon-column-name>customized-url</amazon-column-name>
       <order-item-specific>true</order-item-specific>
       <type>string</type>

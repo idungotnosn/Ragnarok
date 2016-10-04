@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Ragnarok.parser;
 
 namespace Ragnarok.model
 {
@@ -18,6 +19,23 @@ namespace Ragnarok.model
             this.columnStringMappings = new Dictionary<String, String>();
             this.columnIntegerMappings = new Dictionary<String, int>();
         }
+
+        public void putValueByParsingType(String key, String value, ParsingType parsingType)
+        {
+            if (parsingType == ParsingType.DecimalType)
+            {
+                this.putDecimalValue(key, Decimal.Parse(value));
+            }
+            else if (parsingType == ParsingType.IntegerType)
+            {
+                this.putIntegerValue(key, int.Parse(value));
+            }
+            else if (parsingType == ParsingType.StringType)
+            {
+                this.putStringValue(key, value);
+            }
+        }
+
         public void putStringValue(String key, String value)
         {
             this.columnStringMappings.Add(key, value);

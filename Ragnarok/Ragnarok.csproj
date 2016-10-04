@@ -50,6 +50,9 @@
     <Compile Include="model\AmazonOrderItem.cs" />
     <Compile Include="model\ExtensibleDataModel.cs" />
     <Compile Include="parser\AmazonReportParser.cs" />
+    <Compile Include="parser\ParsingRule.cs" />
+    <Compile Include="parser\ParsingRulesInfo.cs" />
+    <Compile Include="parser\ParsingType.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -57,6 +60,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="feeder\everest\AmazonEverestMappings.xml" />
     <Content Include="parser\config\AmazonColumnMappings.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
