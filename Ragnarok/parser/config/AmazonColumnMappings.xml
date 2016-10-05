@@ -91,5 +91,11 @@
       <order-item-specific>true</order-item-specific>
       <type>string</type>
     </amazon-column>
+    <amazon-column>
+      <identifier>false</identifier>
+      <amazon-column-name>customized-page</amazon-column-name>
+      <order-item-specific>true</order-item-specific>
+      <type>string</type>
+    </amazon-column>
   </amazon-column-list>
 </amazon-order-mappings>

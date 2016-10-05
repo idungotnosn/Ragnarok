@@ -33,51 +33,52 @@ namespace Ragnarok
             while (reader.Peek() >= 0)
             {
                 String[] rowValues = reader.ReadLine().Split('\t');
-                if (rowValues.Length != headerNames.Length)
-                {
-                    Console.WriteLine("Row values did not have same length as header values!");
-                    Console.ReadLine();
-                }
-
                 String rowIdentifier = rowValues[identifierIndex];
                 AmazonOrder currentOrder;
                 if (!amazonOrderDictionary.ContainsKey(rowIdentifier))
                 {
-                    currentOrder = new AmazonOrder();
-                    for (int i = 0; i < headerNames.Length; i++)
-                    {
-                        String headerName = headerNames[i];
-                        if (!parsingRules.columnNameHasRule(headerName))
-                        {
-                            continue;
-                        }
-                        if (!parsingRules.isColumnNameForOrderItem(headerName))
-                        {
-                            ParsingRule parsingRule = parsingRules.getParsingRule(headerName);
-                            currentOrder.putValueByParsingType(headerName, rowValues[i], parsingRules.getParsingRule(headerName).ParsingType);
-                        }
-                    }
+                    currentOrder = getAmazonOrderFromRow(headerNames, rowValues, parsingRules);
                     amazonOrderDictionary.Add(rowIdentifier, currentOrder);
                 }
                 else
                 {
                     currentOrder = amazonOrderDictionary[rowIdentifier];
                 }
-                AmazonOrderItem orderItem = new AmazonOrderItem();
-                for (int i = 0; i < headerNames.Length; i++) {
-                    String headerName = headerNames[i];
-                    if (!parsingRules.columnNameHasRule(headerName))
-                    {
-                        continue;
-                    }
-                    if (parsingRules.isColumnNameForOrderItem(headerName))
-                    {
-                        orderItem.putValueByParsingType(headerName, rowValues[i], parsingRules.getParsingRule(headerName).ParsingType);
-                    }
-                }
-                currentOrder.addOrderItem(orderItem);
+
+                currentOrder.addOrderItem(getAmazonOrderItemFromRow(headerNames, rowValues, parsingRules));
             }
             return amazonOrderDictionary.Values;
+        }
+
+        private static AmazonOrderItem getAmazonOrderItemFromRow(String[] headerNames, String[] rowValues, ParsingRulesInfo parsingRules)
+        {
+            AmazonOrderItem orderItem = new AmazonOrderItem();
+            for (int i = 0; i < headerNames.Length; i++)
+            {
+                String headerName = headerNames[i];
+                if (!parsingRules.columnNameHasRule(headerName)) { continue; }
+                if (parsingRules.isColumnNameForOrderItem(headerName))
+                {
+                    orderItem.putValueByParsingType(headerName, rowValues[i], parsingRules.getParsingRule(headerName).ParsingType);
+                }
+            }
+            return orderItem;
+        }
+
+        private static AmazonOrder getAmazonOrderFromRow(String[] headerNames, String[] rowValues, ParsingRulesInfo parsingRules)
+        {
+            AmazonOrder result = new AmazonOrder();
+            for (int i = 0; i < headerNames.Length; i++)
+            {
+                String headerName = headerNames[i];
+                if (!parsingRules.columnNameHasRule(headerName)) { continue; }
+                if (!parsingRules.isColumnNameForOrderItem(headerName))
+                {
+                    ParsingRule parsingRule = parsingRules.getParsingRule(headerName);
+                    result.putValueByParsingType(headerName, rowValues[i], parsingRules.getParsingRule(headerName).ParsingType);
+                }
+            }
+            return result;
         }
 
         private static ParsingRulesInfo getParsingRulesInfo()
