@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MarketplaceWebService">
+      <HintPath>bin\Debug\libs\MarketplaceWebService.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -41,11 +44,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="amazonhttp\Authentication.cs" />
     <Compile Include="feeder\everest\EverestFeeder.cs" />
     <Compile Include="feeder\FeederFactory.cs" />
     <Compile Include="feeder\IFeeder.cs" />
     <Compile Include="mediator\Mediator.cs" />
-    <Compile Include="http\ReportRetrievalService.cs" />
+    <Compile Include="amazonhttp\ReportRetrievalService.cs" />
     <Compile Include="model\AmazonOrder.cs" />
     <Compile Include="model\AmazonOrderItem.cs" />
     <Compile Include="model\ExtensibleDataModel.cs" />
@@ -60,6 +64,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="amazonhttp\amazon.xml" />
     <Content Include="feeder\everest\AmazonEverestMappings.xml" />
     <Content Include="parser\config\AmazonColumnMappings.xml" />
   </ItemGroup>
