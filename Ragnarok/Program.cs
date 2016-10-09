@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using Ragnarok.model;
+using RagnarokException;
 using Ragnarok.amazonhttp;
 
 namespace Ragnarok
@@ -13,15 +14,21 @@ namespace Ragnarok
     {
         static void Main(string[] args)
         {
+            CustomizationRetrievalService svc = new CustomizationRetrievalService();
+            //svc.getCustomizationFromOrderID("stuff");
+            
             Console.WriteLine("Hello world!");
-            Program.testAmazonReportRetrieval();
+            Mediator mediator = new Mediator();
+            try { 
+                mediator.syncAmazonOrders();
+            }
+            catch (RagnarokConcurrencyException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            Console.WriteLine("Stuff happened");
             Console.ReadLine();
-        }
-
-        public static void testAmazonReportRetrieval()
-        {
-            ReportRetrievalService s = new ReportRetrievalService();
-            s.getReport();
+             
         }
 
         public static void testAmazonReportParser()

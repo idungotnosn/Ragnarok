@@ -88,10 +88,10 @@ namespace Ragnarok
             xmlDoc.LoadXml(File.ReadAllText("config/AmazonColumnMappings.xml"));
             foreach (XmlNode row in xmlDoc.SelectNodes("//amazon-column"))
             {
-                String columnName = row.SelectSingleNode("amazon-column-name").InnerText;
-                String orderItemSpecific = row.SelectSingleNode("order-item-specific").InnerText;
-                String identifier = row.SelectSingleNode("identifier").InnerText;
-                String type = row.SelectSingleNode("type").InnerText;
+                String columnName = row.SelectSingleNode("amazon-column-name").InnerText.Trim();
+                String orderItemSpecific = row.SelectSingleNode("order-item-specific").InnerText.Trim();
+                String identifier = row.SelectSingleNode("identifier").InnerText.Trim();
+                String type = row.SelectSingleNode("type").InnerText.Trim();
                 ParsingRule parsingRule = new ParsingRule(columnName, type, orderItemSpecific.Equals("true"), identifier.Equals("true"));
                 result.addParsingRule(parsingRule);
             }

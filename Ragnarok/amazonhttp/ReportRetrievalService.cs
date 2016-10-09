@@ -7,71 +7,99 @@ using System.IO;
 using MarketplaceWebService;
 using MarketplaceWebService.Model;
 using System.Xml;
+using RagnarokException;
 
 namespace Ragnarok.amazonhttp
 {
     class ReportRetrievalService
     {
 
-        public static void InvokeGetReport(MarketplaceWebService.MarketplaceWebService service, GetReportRequest request)
+        private Authentication auth;
+        private MarketplaceWebServiceConfig config;
+        private MarketplaceWebServiceClient serviceClient;
+
+        public ReportRetrievalService()
+        {
+            this.auth = readAuthenticationFromDisk();
+
+            string applicationName = "Ragnarok";
+            string applicationVersion = "0.1";
+
+            config = new MarketplaceWebServiceConfig();
+            this.config.ServiceURL = auth.ServiceUrl;
+
+            this.config.SetUserAgentHeader(
+                applicationName,
+                applicationVersion,
+                "C#"
+            );
+
+            serviceClient = new MarketplaceWebServiceClient(
+                auth.AccessKeyId,
+                auth.SecretAccessKey,
+                this.config
+            );
+        }
+
+        public ICollection<ReportInfo> transferReportsToHardDisk(ICollection<ReportInfo> reportIds)
+        {
+            List<ReportInfo> reportsOnDisk = new List<ReportInfo>();
+            foreach (ReportInfo current in reportIds)
+            {
+                if (!current.IsSetReportId())
+                {
+                    throw new AmazonWebException("The reportID was not set on an object passed to the method transferReportsToHardDisk");
+                }
+                GetReportRequest request = new GetReportRequest();
+                request.Merchant = auth.MerchantId;
+                request.ReportId = current.ReportId;
+                using (request.Report = File.Open("reports/"+current.ReportId + ".xml", FileMode.OpenOrCreate, FileAccess.ReadWrite)) { 
+                    try
+                    {
+                        GetReportResponse response = serviceClient.GetReport(request);
+                        if (response.IsSetGetReportResult())
+                        {
+                            reportsOnDisk.Add(current);
+                        }
+                        else
+                        {
+                            throw new AmazonWebException("No report result was available when attempting to get report with ID: " + request.ReportId);
+                        }
+                    }
+                    catch (MarketplaceWebServiceException ex)
+                    {
+                        throw new AmazonWebException("A MarketplaceWebServiceException occurred while getting report: \nError Code: " + ex.ErrorCode + "\nMessage: " + ex.Message, ex);
+                    }
+                }
+            }
+            return reportsOnDisk;
+        }
+
+        public ICollection<ReportInfo> retrieveListOfReports()
         {
             try
             {
-                GetReportResponse response = service.GetReport(request);
-
-                ResponseHeaderMetadata headerMetadata = response.ResponseHeaderMetadata;
-                ResponseMetadata metadata = response.ResponseMetadata;
-
-
-                Console.WriteLine("Service Response");
-                Console.WriteLine("=============================================================================");
-                Console.WriteLine();
-
-                Console.WriteLine("        GetReportResponse");
-                if (response.IsSetGetReportResult())
+                GetReportListRequest request = new GetReportListRequest();
+                request.Merchant = auth.MerchantId;
+                GetReportListResponse response = serviceClient.GetReportList(request);
+                if (response.IsSetGetReportListResult())
                 {
-                    Console.WriteLine("            GetReportResult");
-                    GetReportResult getReportResult = response.GetReportResult;
-                    if (getReportResult.IsSetContentMD5())
-                    {
-                        Console.WriteLine("                ContentMD5");
-                        Console.WriteLine("                    {0}", getReportResult.ContentMD5);
-                    }
+                    return response.GetReportListResult.ReportInfo.Where
+                        (reportInfo => reportInfo.IsSetReportType() 
+                            && reportInfo.ReportType.Equals("_GET_FLAT_FILE_ORDERS_DATA_")).ToList<ReportInfo>();
                 }
-                if (response.IsSetResponseMetadata())
+                else
                 {
-                    Console.WriteLine("            ResponseMetadata");
-                    ResponseMetadata responseMetadata = response.ResponseMetadata;
-                    if (responseMetadata.IsSetRequestId())
-                    {
-                        Console.WriteLine("                RequestId");
-                        Console.WriteLine("                    {0}", responseMetadata.RequestId);
-                    }
+                    throw new AmazonWebException("The get report list result was not set from the Amazon server.");
                 }
-
-                Console.WriteLine("            ResponseHeaderMetadata");
-                Console.WriteLine("                RequestId");
-                Console.WriteLine("                    " + response.ResponseHeaderMetadata.RequestId);
-                Console.WriteLine("                ResponseContext");
-                Console.WriteLine("                    " + response.ResponseHeaderMetadata.ResponseContext);
-                Console.WriteLine("                Timestamp");
-                Console.WriteLine("                    " + response.ResponseHeaderMetadata.Timestamp);
-
             }
             catch (MarketplaceWebServiceException ex)
             {
-                Console.WriteLine("Caught Exception: " + ex.Message);
-                Console.WriteLine("Response Status Code: " + ex.StatusCode);
-                Console.WriteLine("Error Code: " + ex.ErrorCode);
-                Console.WriteLine("Error Type: " + ex.ErrorType);
-                Console.WriteLine("Request ID: " + ex.RequestId);
-                Console.WriteLine("XML: " + ex.XML);
-                Console.WriteLine("ResponseHeaderMetadata: " + ex.ResponseHeaderMetadata);
+                throw new AmazonWebException("A MarketplaceWebServiceException occurred.  Error code: " + ex.ErrorCode + "\nMessage: " + ex.Message);
             }
         }
 
-
-        private static Authentication getAuthentication()
+        private static Authentication readAuthenticationFromDisk()
         {
             Authentication auth = new Authentication();
             XmlDocument xmlDoc = new XmlDocument();
@@ -84,56 +112,7 @@ namespace Ragnarok.amazonhttp
                 auth.MarketplaceId = row.SelectSingleNode("marketplace-id").InnerText.Trim();
                 auth.ServiceUrl = row.SelectSingleNode("service-url").InnerText.Trim();
             }
-            return auth;        
-        }
-
-        public Stream getReport(){
-
-            Authentication auth = ReportRetrievalService.getAuthentication();
-
-
-            
-
-            const string applicationName = "Ragnarok";
-            const string applicationVersion = "0.1";
-
-            
-            MarketplaceWebServiceConfig marketplaceConfig = new MarketplaceWebServiceConfig();
-            marketplaceConfig.ServiceURL = auth.ServiceUrl;
-            
-            marketplaceConfig.SetUserAgentHeader(
-                applicationName,
-                applicationVersion,
-                "C#"
-                );
-
-            MarketplaceWebServiceClient service = new MarketplaceWebServiceClient(
-                auth.AccessKeyId, 
-                auth.SecretAccessKey, 
-                marketplaceConfig
-            );
-
-
-            GetReportRequest request = new GetReportRequest();
-            request.Merchant = auth.MerchantId;
-            request.MWSAuthToken = "<Your MWS Auth Token>"; // Optional
-
-            // Note that depending on the type of report being downloaded, a report can reach 
-            // sizes greater than 1GB. For this reason we recommend that you _always_ program to
-            // MWS in a streaming fashion. Otherwise, as your business grows you may silently reach
-            // the in-memory size limit and have to re-work your solution.
-            // NOTE: Due to Content-MD5 validation, the stream must be read/write.
-            request.ReportId = "3002725304017077";
-            request.Report = File.Open("report.xml", FileMode.OpenOrCreate, FileAccess.ReadWrite);
-            InvokeGetReport(service, request);
-            using (StreamReader reader = new StreamReader(request.Report))
-            {
-                String contents = reader.ReadToEnd();
-                Console.WriteLine(contents);
-            }
-            File.Delete("report.xml");
-            Console.ReadLine();
-            return null;
+            return auth;
         }
     }
 }
