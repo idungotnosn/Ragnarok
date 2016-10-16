@@ -7,7 +7,9 @@ using System.IO;
 using RagnarokException;
 using Ragnarok.amazonhttp;
 using Ragnarok.db;
+using Ragnarok.model;
 using MarketplaceWebService.Model;
+using Ragnarok.feeder;
 
 
 namespace Ragnarok
@@ -22,30 +24,72 @@ namespace Ragnarok
             }
 
             try { 
-            using (System.IO.File.Create("reports/lock")) {}
-            IDao dao = DaoFactory.createDao();
-
-            ReportRetrievalService reportRetrievalService = new ReportRetrievalService();
-
-            ICollection<ReportInfo> listReportInfo = reportRetrievalService.retrieveListOfReports();
-
-            listReportInfo = dao.filterReportsAlreadySynced(listReportInfo);
-
-            reportRetrievalService.transferReportsToHardDisk(listReportInfo);
                 
-                // 5 - Parse all of those reports with AmazonReportParser, get list of AmazonOrders
+                using (System.IO.File.Create("reports/lock")) {}
 
-                // 6 - Find all amazon orders in that list that were already submitted to Everest through SQLDAO
+                // UserInteraction.setStatus("Initializing...");
 
-                // 7 - Remove amazon orders found in step 6 from the amazon order list
+                IDao dao = DaoFactory.createDao();
 
-                // 8 - Submit all amazon orders that were not removed in step 7 to Everest
+                IFeeder feeder = FeederFactory.getFeeder();
 
-                // 9 - Delete all files in report xml directory
+                AmazonReportParser reportParser = new AmazonReportParser();
+
+                ReportRetrievalService reportRetrievalService = new ReportRetrievalService();
+
+                // UserInteraction.setStatus("Retrieving reports from Amazon...");
+
+                ICollection<ReportInfo> listReportInfo = reportRetrievalService.retrieveListOfReports();
+
+                // UserInteraction.showReports(listReportInfo)
+
+                // UserInteraction.setStatus("Filtering reports from Amazon already reported in SQL...");
+
+                listReportInfo = dao.filterReportsAlreadySynced(listReportInfo);
+
+                // UserInteraction.showReports(listReportInfo)
+
+                // UserInteraction.setStatus("Transferring filtered reports to hard disk...");
+
+                reportRetrievalService.transferReportsToHardDisk(listReportInfo);
+
+                // UserInteraction.setStatus("Parsing orders from reports...");
+
+                ICollection<AmazonOrder> orders = AmazonReportParser.parseOrderListFromReportsInPath("reports");
+
+                // UserInteraction.showOrders(orders);
+
+                // UserInteraction.setStatus("Filtering out orders that were already saved in database")
+
+                orders = dao.filterOrdersAlreadySynced(orders);
+
+                // UserInteraction.setStatus("Feeding orders into Everest...")
+
+                // UserInteraction.setStatus("Updating DB tables...");
+
+                try { 
+
+                    dao.insertReportsToDB(listReportInfo);
+
+                    dao.insertOrdersToDB(orders);
+
+                    feeder.feedAmazonOrders(orders);  // Please be ACIDic with rollbacks!!!
+
+                }
+                catch (Exception) { 
+
+                    dao.deleteOrdersFromDB(orders);
+
+                    dao.deleteReportsFromDB(listReportInfo);
+
+                }
+
+                // UserInteraction.setStatus("Operation complete.");
+
             }
             finally
             {
-                //deleteAll("reports");
+                deleteAll("reports");
             }
         }
 

@@ -13,7 +13,30 @@ namespace Ragnarok
 {
     class AmazonReportParser
     {
-        public static ICollection<AmazonOrder> parseOrderListFromReport(Stream reportStream)
+
+        public static ICollection<AmazonOrder> parseOrderListFromReportsInPath(String directoryPath)
+        {
+            List<AmazonOrder> result = new List<AmazonOrder>();
+            HashSet<string> usedIdentifiers = new HashSet<string>();
+            ParsingRulesInfo parseRules = getParsingRulesInfo();
+            foreach (string file in Directory.EnumerateFiles(directoryPath, "*.xml"))
+            {
+                using (FileStream stream = File.OpenRead(file))
+                {
+                    foreach(AmazonOrder order in parseOrderListFromReport(stream)){
+                        string orderIdentifier = order.getStringValue(parseRules.IdentifierColumn);
+                        if (!usedIdentifiers.Contains(orderIdentifier))
+                        {
+                            result.Add(order);
+                            usedIdentifiers.Add(orderIdentifier);
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+
+        private static ICollection<AmazonOrder> parseOrderListFromReport(Stream reportStream)
         {
             ParsingRulesInfo parseRules = getParsingRulesInfo();
             using (StreamReader reader = new StreamReader(reportStream))

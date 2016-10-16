@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MarketplaceWebService.Model;
+using Ragnarok.model;
 
 namespace Ragnarok.db
 {
@@ -17,5 +19,28 @@ namespace Ragnarok.db
         {
             return orders;
         }
+
+        public void insertReportsToDB(ICollection<ReportInfo> reports)
+        {
+
+        }
+
+
+        public void insertOrdersToDB(ICollection<AmazonOrder> orders)
+        {
+
+        }
+
+        void deleteOrdersFromDB(ICollection<AmazonOrder> reports)
+        {
+
+        }
+
+        void deleteReportsFromDB(ICollection<ReportInfo> orders)
+        {
+
+        }
+
+
     }
 }

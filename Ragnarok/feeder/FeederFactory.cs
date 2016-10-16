@@ -9,7 +9,7 @@ namespace Ragnarok.feeder
 {
     class FeederFactory
     {
-        IFeeder getFeeder()
+        public static IFeeder getFeeder()
         {
             return new EverestFeeder();
         }

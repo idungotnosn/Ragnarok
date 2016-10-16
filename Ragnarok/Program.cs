@@ -14,8 +14,6 @@ namespace Ragnarok
     {
         static void Main(string[] args)
         {
-            CustomizationRetrievalService svc = new CustomizationRetrievalService();
-            //svc.getCustomizationFromOrderID("stuff");
             
             Console.WriteLine("Hello world!");
             Mediator mediator = new Mediator();
@@ -31,6 +29,7 @@ namespace Ragnarok
              
         }
 
+        /*
         public static void testAmazonReportParser()
         {
             using (FileStream fs = File.OpenRead("testdata/itemprice.txt"))
@@ -46,6 +45,7 @@ namespace Ragnarok
             }
 
         }
+         */
 
     }
 }

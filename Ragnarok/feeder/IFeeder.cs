@@ -9,7 +9,7 @@ namespace Ragnarok.feeder
 {
     interface IFeeder
     {
-        bool feedAmazonOrders(List<AmazonOrder> orders);
+        bool feedAmazonOrders(ICollection<AmazonOrder> orders);
         void setAuthentication(Dictionary<String, String> authentication);
     }
 }

@@ -9,7 +9,7 @@ namespace Ragnarok.feeder.everest
 {
     class EverestFeeder : IFeeder
     {
-        public bool feedAmazonOrders(List<AmazonOrder> orders)
+        public bool feedAmazonOrders(ICollection<AmazonOrder> orders)
         {
             return false;
         }

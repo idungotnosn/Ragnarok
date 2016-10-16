@@ -13,7 +13,15 @@ namespace Ragnarok.db
 
         ICollection<ReportInfo> filterReportsAlreadySynced(ICollection<ReportInfo> reports);
 
+        void insertReportsToDB(ICollection<ReportInfo> reports);
+
         ICollection<AmazonOrder> filterOrdersAlreadySynced(ICollection<AmazonOrder> orders);
+
+        void insertOrdersToDB(ICollection<AmazonOrder> orders);
+
+        void deleteOrdersFromDB(ICollection<AmazonOrder> reports);
+
+        void deleteReportsFromDB(ICollection<ReportInfo> orders);
 
     }
 }
