@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Ragnarok.model
 {
-    class AmazonOrder : ExtensibleDataModel
+    public class AmazonOrder : ExtensibleDataModel
     {
         private List<AmazonOrderItem> orderItems;
 
@@ -36,6 +36,15 @@ namespace Ragnarok.model
                 result += item.getIntegerValue(key);
             }
             return result;
+        }
+
+        public String ToString()
+        {
+            StringBuilder sb = new StringBuilder(base.ToString());
+            foreach(AmazonOrderItem item in this.orderItems){
+                sb.Append(item.ToString());
+            }
+            return sb.ToString();
         }
         
     }

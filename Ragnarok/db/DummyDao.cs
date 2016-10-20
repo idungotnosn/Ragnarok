@@ -8,7 +8,7 @@ using MarketplaceWebService.Model;
 
 namespace Ragnarok.db
 {
-    class DummyDao : IDao
+    public class DummyDao : IDao
     {
 
         public ICollection<MarketplaceWebService.Model.ReportInfo> filterReportsAlreadySynced(ICollection<MarketplaceWebService.Model.ReportInfo> reports)
@@ -32,12 +32,12 @@ namespace Ragnarok.db
 
         }
 
-        void deleteOrdersFromDB(ICollection<ReportInfo> reports)
+        public void deleteOrdersFromDB(ICollection<AmazonOrder> reports)
         {
 
         }
 
-        void deleteReportsFromDB(ICollection<AmazonOrder> orders)
+        public void deleteReportsFromDB(ICollection<ReportInfo> orders)
         {
 
         }

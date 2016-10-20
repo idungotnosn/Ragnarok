@@ -49,7 +49,6 @@
   <ItemGroup>
     <Compile Include="amazonhttp\Authentication.cs" />
     <Compile Include="amazonhttp\CustomizationRetrievalService.cs" />
-    <Compile Include="amazonhttp\Interface1.cs" />
     <Compile Include="db\DaoFactory.cs" />
     <Compile Include="db\DummyDao.cs" />
     <Compile Include="Exception\RagnarokConcurrencyException.cs" />
@@ -71,6 +70,7 @@
     <Compile Include="db\IDao.cs" />
     <Compile Include="db\MySqlDao.cs" />
     <Compile Include="userinteraction\CommandLineInteraction.cs" />
+    <Compile Include="userinteraction\UserInteractionFactory.cs" />
     <Compile Include="userinteraction\UserInteraction.cs" />
   </ItemGroup>
   <ItemGroup>

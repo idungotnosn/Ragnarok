@@ -31,12 +31,12 @@ namespace Ragnarok.db
 
         }
 
-        void deleteOrdersFromDB(ICollection<AmazonOrder> reports)
+        public void deleteOrdersFromDB(ICollection<AmazonOrder> reports)
         {
 
         }
 
-        void deleteReportsFromDB(ICollection<ReportInfo> orders)
+        public void deleteReportsFromDB(ICollection<ReportInfo> orders)
         {
 
         }

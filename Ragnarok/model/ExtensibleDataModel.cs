@@ -7,7 +7,7 @@ using Ragnarok.parser;
 
 namespace Ragnarok.model
 {
-    class ExtensibleDataModel
+    public class ExtensibleDataModel
     {
         protected Dictionary<String, String> columnStringMappings;
         protected Dictionary<String, decimal> columnDecimalMappings;
@@ -18,6 +18,16 @@ namespace Ragnarok.model
             this.columnDecimalMappings = new Dictionary<String, decimal>();
             this.columnStringMappings = new Dictionary<String, String>();
             this.columnIntegerMappings = new Dictionary<String, int>();
+        }
+
+        public String ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (KeyValuePair<string, decimal> entry in columnDecimalMappings)
+            {
+                sb.Append(entry.Key + " = " + entry.Value + "\n");
+            }
+            return sb.ToString();
         }
 
         public void putValueByParsingType(String key, String value, ParsingType parsingType)

@@ -10,6 +10,7 @@ using Ragnarok.db;
 using Ragnarok.model;
 using MarketplaceWebService.Model;
 using Ragnarok.feeder;
+using Ragnarok.userinteraction;
 
 
 namespace Ragnarok
@@ -27,7 +28,11 @@ namespace Ragnarok
                 
                 using (System.IO.File.Create("reports/lock")) {}
 
-                // UserInteraction.setStatus("Initializing...");
+                UserInteraction interaction = UserInteractionFactory.createUserInteraction();
+
+                interaction.setStatus("Initializing...");
+
+                
 
                 IDao dao = DaoFactory.createDao();
 
@@ -37,35 +42,35 @@ namespace Ragnarok
 
                 ReportRetrievalService reportRetrievalService = new ReportRetrievalService();
 
-                // UserInteraction.setStatus("Retrieving reports from Amazon...");
+                interaction.setStatus("Retrieving reports from Amazon...");
 
                 ICollection<ReportInfo> listReportInfo = reportRetrievalService.retrieveListOfReports();
 
-                // UserInteraction.showReports(listReportInfo)
+                interaction.showListOfReports(listReportInfo);
 
-                // UserInteraction.setStatus("Filtering reports from Amazon already reported in SQL...");
+                interaction.setStatus("Filtering reports from Amazon already reported in SQL...");
 
                 listReportInfo = dao.filterReportsAlreadySynced(listReportInfo);
 
-                // UserInteraction.showReports(listReportInfo)
+                interaction.showListOfReports(listReportInfo);
 
-                // UserInteraction.setStatus("Transferring filtered reports to hard disk...");
+                interaction.setStatus("Transferring filtered reports to hard disk...");
 
                 reportRetrievalService.transferReportsToHardDisk(listReportInfo);
 
-                // UserInteraction.setStatus("Parsing orders from reports...");
+                interaction.setStatus("Parsing orders from reports...");
 
                 ICollection<AmazonOrder> orders = AmazonReportParser.parseOrderListFromReportsInPath("reports");
 
-                // UserInteraction.showOrders(orders);
+                interaction.showListOfOrders(orders);
 
-                // UserInteraction.setStatus("Filtering out orders that were already saved in database")
+                interaction.setStatus("Filtering out orders that were already saved in database");
 
                 orders = dao.filterOrdersAlreadySynced(orders);
 
-                // UserInteraction.setStatus("Feeding orders into Everest...")
+                interaction.setStatus("Feeding orders into Everest...");
 
-                // UserInteraction.setStatus("Updating DB tables...");
+                interaction.setStatus("Updating DB tables...");
 
                 try { 
 
@@ -84,7 +89,7 @@ namespace Ragnarok
 
                 }
 
-                // UserInteraction.setStatus("Operation complete.");
+                interaction.setStatus("Operation complete.");
 
             }
             finally
