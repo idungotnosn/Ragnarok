@@ -10,9 +10,17 @@ namespace Ragnarok.model
     {
         private List<AmazonOrderItem> orderItems;
 
+        private String identifier;
+
         public AmazonOrder()  : base(){
             this.orderItems = new List<AmazonOrderItem>();
         }
+
+        public String Identifier
+            {
+                get { return identifier; }
+                set { identifier = value; }
+            }
 
         public void addOrderItem(AmazonOrderItem item)
         {

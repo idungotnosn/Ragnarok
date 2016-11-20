@@ -67,7 +67,7 @@ namespace Ragnarok
                 {
                     currentOrder = amazonOrderDictionary[rowIdentifier];
                 }
-
+                currentOrder.Identifier = rowIdentifier;
                 currentOrder.addOrderItem(getAmazonOrderItemFromRow(headerNames, rowValues, parsingRules));
             }
             return amazonOrderDictionary.Values;

@@ -8,7 +8,7 @@ namespace Ragnarok.db
 {
     class DaoFactory
     {
-        public static IDao createDao()
+        public static IDisposable createDao()
         {
             return new MySqlDao();
         }

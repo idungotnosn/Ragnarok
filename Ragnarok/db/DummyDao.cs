@@ -8,9 +8,8 @@ using MarketplaceWebService.Model;
 
 namespace Ragnarok.db
 {
-    public class DummyDao : IDao
+    public class DummyDao : IDao, IDisposable
     {
-
         public ICollection<MarketplaceWebService.Model.ReportInfo> filterReportsAlreadySynced(ICollection<MarketplaceWebService.Model.ReportInfo> reports)
         {
             return reports;
@@ -42,5 +41,9 @@ namespace Ragnarok.db
 
         }
 
+        public void Dispose()
+        {
+
+        }
     }
 }

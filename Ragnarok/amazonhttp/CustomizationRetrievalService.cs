@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Net;
 using System.IO;
-using WatiN.Core;
 using Ragnarok.model;
 
 namespace Ragnarok.amazonhttp

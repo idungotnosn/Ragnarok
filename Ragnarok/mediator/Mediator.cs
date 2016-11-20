@@ -28,69 +28,73 @@ namespace Ragnarok
                 
                 using (System.IO.File.Create("reports/lock")) {}
 
-                UserInteraction interaction = UserInteractionFactory.createUserInteraction();
+                using (IDisposable disposableDao = DaoFactory.createDao())
+                {
+                    IDao dao = (IDao)disposableDao;
 
-                interaction.setStatus("Initializing...");
+                    UserInteraction interaction = UserInteractionFactory.createUserInteraction();
 
-                
+                    interaction.setStatus("Initializing...");
 
-                IDao dao = DaoFactory.createDao();
+                    IFeeder feeder = FeederFactory.getFeeder();
 
-                IFeeder feeder = FeederFactory.getFeeder();
+                    AmazonReportParser reportParser = new AmazonReportParser();
 
-                AmazonReportParser reportParser = new AmazonReportParser();
+                    ReportRetrievalService reportRetrievalService = new ReportRetrievalService();
 
-                ReportRetrievalService reportRetrievalService = new ReportRetrievalService();
+                    interaction.setStatus("Retrieving reports from Amazon...");
 
-                interaction.setStatus("Retrieving reports from Amazon...");
+                    ICollection<ReportInfo> listReportInfo = reportRetrievalService.retrieveListOfReports();
 
-                ICollection<ReportInfo> listReportInfo = reportRetrievalService.retrieveListOfReports();
+                    interaction.showListOfReports(listReportInfo);
 
-                interaction.showListOfReports(listReportInfo);
+                    interaction.setStatus("Filtering reports from Amazon already reported in SQL...");
 
-                interaction.setStatus("Filtering reports from Amazon already reported in SQL...");
+                    listReportInfo = dao.filterReportsAlreadySynced(listReportInfo);
 
-                listReportInfo = dao.filterReportsAlreadySynced(listReportInfo);
+                    interaction.showListOfReports(listReportInfo);
 
-                interaction.showListOfReports(listReportInfo);
+                    interaction.setStatus("Transferring filtered reports to hard disk...");
 
-                interaction.setStatus("Transferring filtered reports to hard disk...");
+                    reportRetrievalService.transferReportsToHardDisk(listReportInfo);
 
-                reportRetrievalService.transferReportsToHardDisk(listReportInfo);
+                    interaction.setStatus("Parsing orders from reports...");
 
-                interaction.setStatus("Parsing orders from reports...");
+                    ICollection<AmazonOrder> orders = AmazonReportParser.parseOrderListFromReportsInPath("reports");
 
-                ICollection<AmazonOrder> orders = AmazonReportParser.parseOrderListFromReportsInPath("reports");
+                    interaction.showListOfOrders(orders);
 
-                interaction.showListOfOrders(orders);
+                    interaction.setStatus("Filtering out orders that were already saved in database");
 
-                interaction.setStatus("Filtering out orders that were already saved in database");
+                    orders = dao.filterOrdersAlreadySynced(orders);
 
-                orders = dao.filterOrdersAlreadySynced(orders);
+                    interaction.setStatus("Feeding orders into Everest...");
 
-                interaction.setStatus("Feeding orders into Everest...");
+                    interaction.setStatus("Updating DB tables...");
 
-                interaction.setStatus("Updating DB tables...");
+                    try
+                    {
 
-                try { 
+                        dao.insertReportsToDB(listReportInfo);
 
-                    dao.insertReportsToDB(listReportInfo);
+                        dao.insertOrdersToDB(orders);
 
-                    dao.insertOrdersToDB(orders);
+                        feeder.feedAmazonOrders(orders);  // Please be ACIDic with rollbacks!!!
 
-                    feeder.feedAmazonOrders(orders);  // Please be ACIDic with rollbacks!!!
+                    }
+                    catch (Exception e)
+                    {
 
+                        interaction.setStatus("ERROR:  An exception occurred while feeding the data to MySQL/Everest.  The process will now roll back.");
+
+                        dao.deleteOrdersFromDB(orders);
+
+                        dao.deleteReportsFromDB(listReportInfo);
+
+                    }
+
+                    interaction.setStatus("Operation complete.");
                 }
-                catch (Exception) { 
-
-                    dao.deleteOrdersFromDB(orders);
-
-                    dao.deleteReportsFromDB(listReportInfo);
-
-                }
-
-                interaction.setStatus("Operation complete.");
-
             }
             finally
             {
