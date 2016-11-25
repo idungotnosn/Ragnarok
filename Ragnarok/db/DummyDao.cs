@@ -20,13 +20,13 @@ namespace Ragnarok.db
             return orders;
         }
 
-        public void insertReportsToDB(ICollection<ReportInfo> reports)
+        public void insertReportsToDB(ICollection<ReportInfo> reports, userinteraction.UserInteraction userInteraction)
         {
 
         }
 
 
-        public void insertOrdersToDB(ICollection<AmazonOrder> orders)
+        public void insertOrdersToDB(ICollection<AmazonOrder> orders, userinteraction.UserInteraction userInteraction)
         {
 
         }

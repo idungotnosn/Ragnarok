@@ -36,7 +36,7 @@ namespace Ragnarok
 
                     interaction.setStatus("Initializing...");
 
-                    IFeeder feeder = FeederFactory.getFeeder();
+                    ITargetDriver feeder = ITargetDriverFactory.getFeeder();
 
                     AmazonReportParser reportParser = new AmazonReportParser();
 
@@ -51,6 +51,12 @@ namespace Ragnarok
                     interaction.setStatus("Filtering reports from Amazon already reported in SQL...");
 
                     listReportInfo = dao.filterReportsAlreadySynced(listReportInfo);
+
+                    if (listReportInfo.Count == 0)
+                    {
+                        interaction.setStatus("The operation is complete - there are no new reports to publish to Everest");
+                        return;
+                    }
 
                     interaction.showListOfReports(listReportInfo);
 
@@ -68,6 +74,12 @@ namespace Ragnarok
 
                     orders = dao.filterOrdersAlreadySynced(orders);
 
+                    if (orders.Count == 0)
+                    {
+                        interaction.setStatus("The operation is complete - there are no new orders to push to Everest.");
+                        return;
+                    }
+
                     interaction.setStatus("Feeding orders into Everest...");
 
                     interaction.setStatus("Updating DB tables...");
@@ -75,9 +87,9 @@ namespace Ragnarok
                     try
                     {
 
-                        dao.insertReportsToDB(listReportInfo);
+                        dao.insertReportsToDB(listReportInfo, interaction);
 
-                        dao.insertOrdersToDB(orders);
+                        dao.insertOrdersToDB(orders, interaction);
 
                         feeder.feedAmazonOrders(orders);  // Please be ACIDic with rollbacks!!!
 

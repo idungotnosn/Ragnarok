@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MarketplaceWebService.Model;
 using Ragnarok.model;
+using Ragnarok.userinteraction;
 using MySql.Data.MySqlClient;
 
 namespace Ragnarok.db
@@ -90,14 +91,79 @@ namespace Ragnarok.db
             return orders.Where(x => !previouslyUsedIds.Contains(x.Identifier)).ToList();
         }
 
-        public void insertReportsToDB(ICollection<ReportInfo> reports)
+        public void insertReportsToDB(ICollection<ReportInfo> reports, UserInteraction interaction)
         {
+            
+            MySqlCommand myCommand = this.conn.CreateCommand();
+            MySqlTransaction myTrans;
+
+            // Start a local transaction
+            myTrans = this.conn.BeginTransaction();
+            // Must assign both transaction object and connection
+            // to Command object for a pending local transaction
+            myCommand.Connection = this.conn;
+            myCommand.Transaction = myTrans;
+
+            try
+            {
+                foreach(ReportInfo report in reports){
+                    myCommand.CommandText = "insert into exported_reports (reportId, exportedDate) VALUES (" + report.ReportId + ", now())";
+                    myCommand.ExecuteNonQuery();
+                }
+                myTrans.Commit();
+
+                interaction.setStatus("Successfully inserted "+reports.Count+" new records to the MySQL database - these have not yet been pushed to Everest though.");
+            }
+            catch (Exception e)
+            {
+                try
+                {
+                    myTrans.Rollback();
+                }
+                catch (MySqlException ex)
+                {
+                    interaction.setStatus("DANGER: An exception occurred while rolling back reports from MySQL : " + ex.Message);
+                }
+            }
 
         }
 
 
-        public void insertOrdersToDB(ICollection<AmazonOrder> orders)
+        public void insertOrdersToDB(ICollection<AmazonOrder> orders, UserInteraction interaction)
         {
+
+            MySqlCommand myCommand = this.conn.CreateCommand();
+            MySqlTransaction myTrans;
+
+            // Start a local transaction
+            myTrans = this.conn.BeginTransaction();
+            // Must assign both transaction object and connection
+            // to Command object for a pending local transaction
+            myCommand.Connection = this.conn;
+            myCommand.Transaction = myTrans;
+
+            try
+            {
+                foreach (AmazonOrder order in orders)
+                {
+                    myCommand.CommandText = "insert into exported_reports (reportId, exportedDate) VALUES (" + order.Identifier + ", now())";
+                    myCommand.ExecuteNonQuery();
+                }
+                myTrans.Commit();
+
+                interaction.showError("Successfully inserted " + orders.Count + " new orders to the MySQL database - these have not yet been pushed to Everest though.");
+            }
+            catch (Exception e)
+            {
+                try
+                {
+                    myTrans.Rollback();
+                }
+                catch (MySqlException ex)
+                {
+                    interaction.showError("DANGER: An exception occurred while rolling back reports from MySQL : " + ex.Message);
+                }
+            }
 
         }
 

@@ -8,7 +8,7 @@ using Ragnarok.model;
 
 namespace Ragnarok.userinteraction
 {
-    interface UserInteraction
+    public interface UserInteraction
     {
         void setStatus(String message);
 
@@ -17,6 +17,5 @@ namespace Ragnarok.userinteraction
         void showListOfOrders(ICollection<AmazonOrder> orders);
 
         void showError(String errorMessage);
-
     }
 }
