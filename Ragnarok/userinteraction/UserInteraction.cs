@@ -12,10 +12,16 @@ namespace Ragnarok.userinteraction
     {
         void setStatus(String message);
 
+        String getCustomMessageFromUrl(String url);
+
         void showListOfReports(ICollection<ReportInfo> reports);
 
         void showListOfOrders(ICollection<AmazonOrder> orders);
 
         void showError(String errorMessage);
+
+        void stopAndShowMessage(String message);
+
+        bool confirmOrder(AmazonOrder order);
     }
 }

@@ -7,11 +7,11 @@ using Ragnarok.feeder.everest;
 
 namespace Ragnarok.feeder
 {
-    class FeederFactory
+    class ITargetDriverFactory
     {
-        public static IFeeder getFeeder()
+        public static ITargetDriver getFeeder()
         {
-            return new EverestFeeder();
+            return new EverestTargetDriver();
         }
     }
 }

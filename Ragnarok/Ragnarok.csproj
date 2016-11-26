@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{9E29BC2B-5BDD-471D-BA37-51AE39BF79B0}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Ragnarok</RootNamespace>
     <AssemblyName>Ragnarok</AssemblyName>
@@ -31,6 +31,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="MarketplaceWebService">
       <HintPath>bin\Debug\libs\MarketplaceWebService.dll</HintPath>
@@ -41,6 +44,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -54,11 +59,24 @@
     <Compile Include="db\DummyDao.cs" />
     <Compile Include="Exception\RagnarokConcurrencyException.cs" />
     <Compile Include="Exception\RagnarokException.cs" />
-    <Compile Include="feeder\everest\EverestFeeder.cs" />
-    <Compile Include="feeder\FeederFactory.cs" />
-    <Compile Include="feeder\IFeeder.cs" />
+    <Compile Include="feeder\everest\EverestTargetDriver.cs" />
+    <Compile Include="feeder\ITargetDriverFactory.cs" />
+    <Compile Include="feeder\ITargetDriver.cs" />
+    <Compile Include="GUI\ConfirmOrderModal.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\ConfirmOrderModal.Designer.cs">
+      <DependentUpon>ConfirmOrderModal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\CustomUrlModal.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\CustomUrlModal.Designer.cs">
+      <DependentUpon>CustomUrlModal.cs</DependentUpon>
+    </Compile>
     <Compile Include="mediator\Mediator.cs" />
     <Compile Include="amazonhttp\ReportRetrievalService.cs" />
+    <Compile Include="mediator\NoSqlMediator.cs" />
     <Compile Include="model\AmazonOrder.cs" />
     <Compile Include="model\AmazonOrderItem.cs" />
     <Compile Include="model\ExtensibleDataModel.cs" />
@@ -70,8 +88,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="db\IDao.cs" />
     <Compile Include="db\MySqlDao.cs" />
-    <Compile Include="userinteraction\CommandLineInteraction.cs" />
-    <Compile Include="userinteraction\UserInteractionFactory.cs" />
+    <Compile Include="GUI\GUIForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\GUIForm.Designer.cs">
+      <DependentUpon>GUIForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="userinteraction\UserInteraction.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -80,6 +102,17 @@
   <ItemGroup>
     <Content Include="feeder\everest\AmazonEverestMappings.xml" />
     <Content Include="parser\config\AmazonColumnMappings.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="GUI\ConfirmOrderModal.resx">
+      <DependentUpon>ConfirmOrderModal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\CustomUrlModal.resx">
+      <DependentUpon>CustomUrlModal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\GUIForm.resx">
+      <DependentUpon>GUIForm.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

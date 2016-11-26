@@ -13,6 +13,28 @@ namespace Ragnarok.model
         protected Dictionary<String, decimal> columnDecimalMappings;
         protected Dictionary<String, int> columnIntegerMappings;
 
+        public Dictionary<String, String> ColumnStringMappings
+        {
+            get
+            {
+                return this.columnStringMappings;
+            }
+        }
+        public Dictionary<String, decimal> ColumnDecimalMappings
+        {
+            get
+            {
+                return this.columnDecimalMappings;
+            }
+        }
+        public Dictionary<String, int> ColumnIntegerMappings
+        {
+            get
+            {
+                return this.columnIntegerMappings;
+            }
+        }
+
         public ExtensibleDataModel()
         {
             this.columnDecimalMappings = new Dictionary<String, decimal>();
@@ -20,7 +42,7 @@ namespace Ragnarok.model
             this.columnIntegerMappings = new Dictionary<String, int>();
         }
 
-        public String ToString()
+        public override String ToString()
         {
             StringBuilder sb = new StringBuilder();
             foreach (KeyValuePair<string, decimal> entry in columnDecimalMappings)
@@ -48,15 +70,15 @@ namespace Ragnarok.model
 
         public void putStringValue(String key, String value)
         {
-            this.columnStringMappings.Add(key, value);
+            this.columnStringMappings[key] = value;
         }
         public void putDecimalValue(String key, decimal value)
         {
-            this.columnDecimalMappings.Add(key, value);
+            this.columnDecimalMappings[key] = value;
         }
         public void putIntegerValue(String key, int value)
         {
-            this.columnIntegerMappings.Add(key, value);
+            this.columnIntegerMappings[key] = value;
         }
         public String getStringValue(String key)
         {

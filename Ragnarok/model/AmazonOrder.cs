@@ -12,6 +12,14 @@ namespace Ragnarok.model
 
         private String identifier;
 
+        public List<AmazonOrderItem> OrderItems
+        {
+            get
+            {
+                return this.orderItems;
+            }
+        }
+
         public AmazonOrder()  : base(){
             this.orderItems = new List<AmazonOrderItem>();
         }
@@ -25,6 +33,11 @@ namespace Ragnarok.model
         public void addOrderItem(AmazonOrderItem item)
         {
             this.orderItems.Add(item);
+        }
+
+        public ICollection<AmazonOrderItem> getOrderItems()
+        {
+            return this.orderItems;
         }
 
         public decimal getDecimalOrderItemAggregate(String key)
@@ -46,7 +59,7 @@ namespace Ragnarok.model
             return result;
         }
 
-        public String ToString()
+        public override String ToString()
         {
             StringBuilder sb = new StringBuilder(base.ToString());
             foreach(AmazonOrderItem item in this.orderItems){

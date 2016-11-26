@@ -7,9 +7,11 @@ using Ragnarok.model;
 
 namespace Ragnarok.feeder
 {
-    interface IFeeder
+    interface ITargetDriver
     {
         bool feedAmazonOrders(ICollection<AmazonOrder> orders);
+        bool feedAmazonOrder(AmazonOrder order);
         void setAuthentication(Dictionary<String, String> authentication);
+        bool orderExistsInTarget(AmazonOrder orderId);
     }
 }

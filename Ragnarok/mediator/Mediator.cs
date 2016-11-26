@@ -15,7 +15,7 @@ using Ragnarok.userinteraction;
 
 namespace Ragnarok
 {
-    class Mediator
+    public class Mediator
     {
         public void syncAmazonOrders(){
 
@@ -32,7 +32,7 @@ namespace Ragnarok
                 {
                     IDao dao = (IDao)disposableDao;
 
-                    UserInteraction interaction = UserInteractionFactory.createUserInteraction();
+                    UserInteraction interaction = null;
 
                     interaction.setStatus("Initializing...");
 

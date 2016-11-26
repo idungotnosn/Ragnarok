@@ -7,7 +7,7 @@ using Ragnarok.model;
 
 namespace Ragnarok.feeder.everest
 {
-    class EverestFeeder : IFeeder
+    class EverestTargetDriver : ITargetDriver
     {
         public bool feedAmazonOrders(ICollection<AmazonOrder> orders)
         {
@@ -17,6 +17,16 @@ namespace Ragnarok.feeder.everest
         public void setAuthentication(Dictionary<String, String> authentication)
         {
 
+        }
+
+        public bool feedAmazonOrder(AmazonOrder order)
+        {
+            return false;
+        }
+
+        public bool orderExistsInTarget(AmazonOrder amazonOrder)
+        {
+            return false;
         }
     }
 }

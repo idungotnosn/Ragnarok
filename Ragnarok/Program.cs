@@ -7,6 +7,9 @@ using System.IO;
 using Ragnarok.model;
 using RagnarokException;
 using Ragnarok.amazonhttp;
+using Ragnarok.mediator;
+using Ragnarok.userinteraction;
+using System.Windows.Forms;
 
 namespace Ragnarok
 {
@@ -14,19 +17,7 @@ namespace Ragnarok
     {
         static void Main(string[] args)
         {
-            
-            Console.WriteLine("Hello world!");
-            Mediator mediator = new Mediator();
-            try { 
-                mediator.syncAmazonOrders();
-            }
-            catch (RagnarokConcurrencyException e)
-            {
-                Console.WriteLine(e.Message);
-            }
-            Console.WriteLine("Stuff happened");
-            Console.ReadLine();
-             
+            Application.Run(new GUIForm(new NoSqlMediator()));  
         }
 
         /*
@@ -39,7 +30,8 @@ namespace Ragnarok
                     while (enumerator.MoveNext())
                     {
                         AmazonOrder current = enumerator.Current;
-                        Console.WriteLine(current.getDecimalOrderItemAggregate("item-price"));
+                        
+         * (current.getDecimalOrderItemAggregate("item-price"));
                     }
                 }
             }
