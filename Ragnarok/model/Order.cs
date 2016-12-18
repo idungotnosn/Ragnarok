@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace Ragnarok.model
 {
-    public class AmazonOrder : ExtensibleDataModel
+    public class Order : ExtensibleDataModel
     {
-        private List<AmazonOrderItem> orderItems;
+        private List<OrderItem> orderItems;
 
         private String identifier;
 
-        public List<AmazonOrderItem> OrderItems
+        public List<OrderItem> OrderItems
         {
             get
             {
@@ -20,8 +20,8 @@ namespace Ragnarok.model
             }
         }
 
-        public AmazonOrder()  : base(){
-            this.orderItems = new List<AmazonOrderItem>();
+        public Order()  : base(){
+            this.orderItems = new List<OrderItem>();
         }
 
         public String Identifier
@@ -30,12 +30,12 @@ namespace Ragnarok.model
                 set { identifier = value; }
             }
 
-        public void addOrderItem(AmazonOrderItem item)
+        public void addOrderItem(OrderItem item)
         {
             this.orderItems.Add(item);
         }
 
-        public ICollection<AmazonOrderItem> getOrderItems()
+        public ICollection<OrderItem> getOrderItems()
         {
             return this.orderItems;
         }
@@ -43,7 +43,7 @@ namespace Ragnarok.model
         public decimal getDecimalOrderItemAggregate(String key)
         {
             decimal result = 0.0m;
-            foreach(AmazonOrderItem item in this.orderItems){
+            foreach(OrderItem item in this.orderItems){
                 result += item.getDecimalValue(key);
             }
             return result;
@@ -52,7 +52,7 @@ namespace Ragnarok.model
         public int getIntegerOrderItemAggregate(String key)
         {
             int result = 0;
-            foreach (AmazonOrderItem item in this.orderItems)
+            foreach (OrderItem item in this.orderItems)
             {
                 result += item.getIntegerValue(key);
             }
@@ -62,7 +62,7 @@ namespace Ragnarok.model
         public override String ToString()
         {
             StringBuilder sb = new StringBuilder(base.ToString());
-            foreach(AmazonOrderItem item in this.orderItems){
+            foreach(OrderItem item in this.orderItems){
                 sb.Append(item.ToString());
             }
             return sb.ToString();

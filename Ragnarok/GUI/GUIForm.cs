@@ -39,7 +39,7 @@ namespace Ragnarok.userinteraction
 
         }
 
-        public void showListOfOrders(ICollection<AmazonOrder> orders)
+        public void showListOfOrders(ICollection<Order> orders)
         {
 
         }
@@ -55,7 +55,7 @@ namespace Ragnarok.userinteraction
 
         }
 
-        public bool confirmOrder(AmazonOrder order)
+        public bool confirmOrder(Order order)
         {
             ConfirmOrderModal modal = new ConfirmOrderModal(order);
             modal.ShowDialog(this);

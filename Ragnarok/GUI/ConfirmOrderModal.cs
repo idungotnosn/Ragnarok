@@ -13,7 +13,7 @@ namespace Ragnarok.GUI
 {
     public partial class ConfirmOrderModal : Form
     {
-        private AmazonOrder order;
+        private Order order;
 
         public DialogResult DialogResult
         {
@@ -21,7 +21,7 @@ namespace Ragnarok.GUI
             set;
         }
 
-        public ConfirmOrderModal(AmazonOrder order)
+        public ConfirmOrderModal(Order order)
         {
             InitializeComponent();
             this.order = order;

@@ -14,16 +14,16 @@ namespace Ragnarok
     class AmazonReportParser
     {
 
-        public static ICollection<AmazonOrder> parseOrderListFromReportsInPath(String directoryPath)
+        public static ICollection<Order> parseOrderListFromReportsInPath(String directoryPath)
         {
-            List<AmazonOrder> result = new List<AmazonOrder>();
+            List<Order> result = new List<Order>();
             HashSet<string> usedIdentifiers = new HashSet<string>();
             ParsingRulesInfo parseRules = getParsingRulesInfo();
             foreach (string file in Directory.EnumerateFiles(directoryPath, "*.xml"))
             {
                 using (FileStream stream = File.OpenRead(file))
                 {
-                    foreach(AmazonOrder order in parseOrderListFromReport(stream)){
+                    foreach(Order order in parseOrderListFromReport(stream)){
                         string orderIdentifier = order.getStringValue(parseRules.IdentifierColumn);
                         if (!usedIdentifiers.Contains(orderIdentifier))
                         {
@@ -36,7 +36,7 @@ namespace Ragnarok
             return result;
         }
 
-        private static ICollection<AmazonOrder> parseOrderListFromReport(Stream reportStream)
+        private static ICollection<Order> parseOrderListFromReport(Stream reportStream)
         {
             ParsingRulesInfo parseRules = getParsingRulesInfo();
             using (StreamReader reader = new StreamReader(reportStream))
@@ -46,18 +46,18 @@ namespace Ragnarok
                     return getAmazonOrdersFromStream(parseRules, headerNames, reader);
                 }
             }
-            return new List<AmazonOrder>();
+            return new List<Order>();
         }
 
-        private static ICollection<AmazonOrder> getAmazonOrdersFromStream(ParsingRulesInfo parsingRules, String[] headerNames, StreamReader reader)
+        private static ICollection<Order> getAmazonOrdersFromStream(ParsingRulesInfo parsingRules, String[] headerNames, StreamReader reader)
         {
-            Dictionary<String, AmazonOrder> amazonOrderDictionary = new Dictionary<String, AmazonOrder>();
+            Dictionary<String, Order> amazonOrderDictionary = new Dictionary<String, Order>();
             int identifierIndex = findIndexOfIdentifier(parsingRules, headerNames);
             while (reader.Peek() >= 0)
             {
                 String[] rowValues = reader.ReadLine().Split('\t');
                 String rowIdentifier = rowValues[identifierIndex];
-                AmazonOrder currentOrder;
+                Order currentOrder;
                 if (!amazonOrderDictionary.ContainsKey(rowIdentifier))
                 {
                     currentOrder = getAmazonOrderFromRow(headerNames, rowValues, parsingRules);
@@ -73,9 +73,9 @@ namespace Ragnarok
             return amazonOrderDictionary.Values;
         }
 
-        private static AmazonOrderItem getAmazonOrderItemFromRow(String[] headerNames, String[] rowValues, ParsingRulesInfo parsingRules)
+        private static OrderItem getAmazonOrderItemFromRow(String[] headerNames, String[] rowValues, ParsingRulesInfo parsingRules)
         {
-            AmazonOrderItem orderItem = new AmazonOrderItem();
+            OrderItem orderItem = new OrderItem();
             for (int i = 0; i < headerNames.Length; i++)
             {
                 String headerName = headerNames[i];
@@ -88,9 +88,9 @@ namespace Ragnarok
             return orderItem;
         }
 
-        private static AmazonOrder getAmazonOrderFromRow(String[] headerNames, String[] rowValues, ParsingRulesInfo parsingRules)
+        private static Order getAmazonOrderFromRow(String[] headerNames, String[] rowValues, ParsingRulesInfo parsingRules)
         {
-            AmazonOrder result = new AmazonOrder();
+            Order result = new Order();
             for (int i = 0; i < headerNames.Length; i++)
             {
                 String headerName = headerNames[i];
@@ -104,7 +104,7 @@ namespace Ragnarok
             return result;
         }
 
-        private static ParsingRulesInfo getParsingRulesInfo()
+        public static ParsingRulesInfo getParsingRulesInfo()
         {
             ParsingRulesInfo result = new ParsingRulesInfo();
             XmlDocument xmlDoc = new XmlDocument();
@@ -115,7 +115,8 @@ namespace Ragnarok
                 String orderItemSpecific = row.SelectSingleNode("order-item-specific").InnerText.Trim();
                 String identifier = row.SelectSingleNode("identifier").InnerText.Trim();
                 String type = row.SelectSingleNode("type").InnerText.Trim();
-                ParsingRule parsingRule = new ParsingRule(columnName, type, orderItemSpecific.Equals("true"), identifier.Equals("true"));
+                String everestColumnName = row.SelectSingleNode("everest-mapping-name").InnerText.Trim();
+                ParsingRule parsingRule = new ParsingRule(columnName, everestColumnName, type, orderItemSpecific.Equals("true"), identifier.Equals("true"));
                 result.addParsingRule(parsingRule);
             }
             return result;

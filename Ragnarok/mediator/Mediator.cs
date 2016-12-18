@@ -66,7 +66,7 @@ namespace Ragnarok
 
                     interaction.setStatus("Parsing orders from reports...");
 
-                    ICollection<AmazonOrder> orders = AmazonReportParser.parseOrderListFromReportsInPath("reports");
+                    ICollection<Order> orders = AmazonReportParser.parseOrderListFromReportsInPath("reports");
 
                     interaction.showListOfOrders(orders);
 

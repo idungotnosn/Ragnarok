@@ -45,11 +45,11 @@ namespace Ragnarok.mediator
 
             interaction.setStatus("Parsing orders from reports...");
 
-            ICollection<AmazonOrder> orders = AmazonReportParser.parseOrderListFromReportsInPath("reports");
+            ICollection<Order> orders = AmazonReportParser.parseOrderListFromReportsInPath("reports");
 
             interaction.showListOfOrders(orders);
 
-            foreach (AmazonOrder order in orders)
+            foreach (Order order in orders)
             {
                 interaction.setStatus("Now reviewing order with ID " + order.Identifier);
                 if (targetDriver.orderExistsInTarget(order))
@@ -57,7 +57,7 @@ namespace Ragnarok.mediator
                     interaction.setStatus("Order with ID " + order.Identifier + " already exists in target, skipping.");
                     continue;
                 }
-                foreach (AmazonOrderItem orderItem in order.getOrderItems()) {
+                foreach (OrderItem orderItem in order.getOrderItems()) {
                      String customUrl = orderItem.getStringValue("customized-page");
                      if (!String.IsNullOrWhiteSpace(customUrl))
                      {
@@ -70,7 +70,7 @@ namespace Ragnarok.mediator
                     continue;
                 }
                 interaction.setStatus("Now sending order with ID " + order.Identifier + " to Amazon...");
-                if (!targetDriver.feedAmazonOrder(order))
+                if (!targetDriver.feedAmazonOrder(AmazonReportParser.getParsingRulesInfo(), order))
                 {
                     interaction.showError("Did not successfully send order with ID " + order.Identifier + " to Everest!");
                 }

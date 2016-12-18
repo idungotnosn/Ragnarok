@@ -42,6 +42,10 @@ namespace Ragnarok.model
             this.columnIntegerMappings = new Dictionary<String, int>();
         }
 
+        public bool containsColumnName(String columnName){
+            return this.ColumnDecimalMappings.ContainsKey(columnName) || this.ColumnIntegerMappings.ContainsKey(columnName) || this.ColumnStringMappings.ContainsKey(columnName);
+        }
+
         public override String ToString()
         {
             StringBuilder sb = new StringBuilder();
@@ -70,7 +74,13 @@ namespace Ragnarok.model
 
         public void putStringValue(String key, String value)
         {
-            this.columnStringMappings[key] = value;
+            if(this.columnStringMappings.ContainsKey(key)){
+                this.columnStringMappings[key] += " " + value;
+            }
+            else
+            {
+                this.columnStringMappings[key] = value;
+            }
         }
         public void putDecimalValue(String key, decimal value)
         {

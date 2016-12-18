@@ -15,7 +15,7 @@ namespace Ragnarok.db
             return reports;
         }
 
-        public ICollection<model.AmazonOrder> filterOrdersAlreadySynced(ICollection<model.AmazonOrder> orders)
+        public ICollection<model.Order> filterOrdersAlreadySynced(ICollection<model.Order> orders)
         {
             return orders;
         }
@@ -26,12 +26,12 @@ namespace Ragnarok.db
         }
 
 
-        public void insertOrdersToDB(ICollection<AmazonOrder> orders, userinteraction.UserInteraction userInteraction)
+        public void insertOrdersToDB(ICollection<Order> orders, userinteraction.UserInteraction userInteraction)
         {
 
         }
 
-        public void deleteOrdersFromDB(ICollection<AmazonOrder> reports)
+        public void deleteOrdersFromDB(ICollection<Order> reports)
         {
 
         }

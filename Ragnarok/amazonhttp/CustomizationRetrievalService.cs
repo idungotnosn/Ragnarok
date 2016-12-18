@@ -13,7 +13,7 @@ namespace Ragnarok.amazonhttp
     class CustomizationRetrievalService
     {
 
-        public String getCustomizationFromAmazonOrder(AmazonOrder order)
+        public String getCustomizationFromAmazonOrder(Order order)
         {
         //https://sellercentral.amazon.com/customization/viewFulfillment/?orderId=107-5715393-4376216&orderItemId=03559723038242&pageId=sc_na_amazon
             return null;

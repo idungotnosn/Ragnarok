@@ -10,6 +10,15 @@ namespace Ragnarok.parser
     {
         Dictionary<String, ParsingRule> parsingRules;
         private String identifierColumn;
+
+        public Dictionary<String, ParsingRule> ParsingRules
+        {
+            get
+            {
+                return parsingRules;
+            }
+        }
+
         public String IdentifierColumn
         {
             get

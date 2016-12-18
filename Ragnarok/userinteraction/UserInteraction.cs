@@ -16,12 +16,12 @@ namespace Ragnarok.userinteraction
 
         void showListOfReports(ICollection<ReportInfo> reports);
 
-        void showListOfOrders(ICollection<AmazonOrder> orders);
+        void showListOfOrders(ICollection<Order> orders);
 
         void showError(String errorMessage);
 
         void stopAndShowMessage(String message);
 
-        bool confirmOrder(AmazonOrder order);
+        bool confirmOrder(Order order);
     }
 }

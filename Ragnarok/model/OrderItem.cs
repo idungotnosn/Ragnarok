@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Ragnarok.model
 {
-    public class AmazonOrderItem : ExtensibleDataModel
+    public class OrderItem : ExtensibleDataModel
     {
-        public AmazonOrderItem() : base() { }
+        public OrderItem() : base() { }
     }
 }

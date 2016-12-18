@@ -73,9 +73,9 @@ namespace Ragnarok.db
             return reports.Where(x => !previouslyUsedIds.Contains(x.ReportId)).ToList();
         }
 
-        public ICollection<model.AmazonOrder> filterOrdersAlreadySynced(ICollection<model.AmazonOrder> orders)
+        public ICollection<model.Order> filterOrdersAlreadySynced(ICollection<model.Order> orders)
         {
-            IEnumerator<AmazonOrder> iter = orders.GetEnumerator();
+            IEnumerator<Order> iter = orders.GetEnumerator();
             string joined = string.Join(",", orders.Select(x => "\"" + x.Identifier + "\""));
             string sql = "SELECT orderId FROM exported_orders WHERE orderId IN(" + joined + ")";
             MySqlCommand cmd = new MySqlCommand(sql, conn);
@@ -129,7 +129,7 @@ namespace Ragnarok.db
         }
 
 
-        public void insertOrdersToDB(ICollection<AmazonOrder> orders, UserInteraction interaction)
+        public void insertOrdersToDB(ICollection<Order> orders, UserInteraction interaction)
         {
 
             MySqlCommand myCommand = this.conn.CreateCommand();
@@ -144,7 +144,7 @@ namespace Ragnarok.db
 
             try
             {
-                foreach (AmazonOrder order in orders)
+                foreach (Order order in orders)
                 {
                     myCommand.CommandText = "insert into exported_reports (reportId, exportedDate) VALUES (" + order.Identifier + ", now())";
                     myCommand.ExecuteNonQuery();
@@ -167,7 +167,7 @@ namespace Ragnarok.db
 
         }
 
-        public void deleteOrdersFromDB(ICollection<AmazonOrder> reports)
+        public void deleteOrdersFromDB(ICollection<Order> reports)
         {
 
         }

@@ -77,8 +77,8 @@
     <Compile Include="mediator\Mediator.cs" />
     <Compile Include="amazonhttp\ReportRetrievalService.cs" />
     <Compile Include="mediator\NoSqlMediator.cs" />
-    <Compile Include="model\AmazonOrder.cs" />
-    <Compile Include="model\AmazonOrderItem.cs" />
+    <Compile Include="model\Order.cs" />
+    <Compile Include="model\OrderItem.cs" />
     <Compile Include="model\ExtensibleDataModel.cs" />
     <Compile Include="parser\AmazonReportParser.cs" />
     <Compile Include="parser\ParsingRule.cs" />
@@ -97,7 +97,7 @@
     <Compile Include="userinteraction\UserInteraction.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="userinteraction\App.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="feeder\everest\AmazonEverestMappings.xml" />

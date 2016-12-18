@@ -9,11 +9,19 @@ namespace Ragnarok.parser
     class ParsingRule
     {
         private String amazonColumnName;
+        private String everestColumnName;
         public string AmazonColumnName    // the Name property
         {
             get
             {
                 return amazonColumnName;
+            }
+        }
+        public string EverestColumnName    // the Name property
+        {
+            get
+            {
+                return everestColumnName;
             }
         }
 
@@ -48,9 +56,10 @@ namespace Ragnarok.parser
         private const String DECIMAL_TYPE = "decimal";
         private const String INTEGER_TYPE = "integer";
 
-        public ParsingRule(String amazonColumnName, String type, bool isOrderItem, bool isIdentifier)
+        public ParsingRule(String amazonColumnName, String everestColumnName, String type, bool isOrderItem, bool isIdentifier)
         {
             this.amazonColumnName = amazonColumnName;
+            this.everestColumnName = everestColumnName;
             this.isIdentifier = isIdentifier;
             this.isOrderItem = isOrderItem;
             if (type.Equals(STRING_TYPE))
