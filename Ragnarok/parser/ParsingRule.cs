@@ -10,6 +10,7 @@ namespace Ragnarok.parser
     {
         private String amazonColumnName;
         private String everestColumnName;
+        private String aggregateMappingName;
         public string AmazonColumnName    // the Name property
         {
             get
@@ -22,6 +23,13 @@ namespace Ragnarok.parser
             get
             {
                 return everestColumnName;
+            }
+        }
+        public string AggregateMappingName    // the Name property
+        {
+            get
+            {
+                return aggregateMappingName;
             }
         }
 
@@ -56,10 +64,11 @@ namespace Ragnarok.parser
         private const String DECIMAL_TYPE = "decimal";
         private const String INTEGER_TYPE = "integer";
 
-        public ParsingRule(String amazonColumnName, String everestColumnName, String type, bool isOrderItem, bool isIdentifier)
+        public ParsingRule(String amazonColumnName, String everestColumnName, String aggregateMappingName, String type, bool isOrderItem, bool isIdentifier)
         {
             this.amazonColumnName = amazonColumnName;
             this.everestColumnName = everestColumnName;
+            this.aggregateMappingName = aggregateMappingName;
             this.isIdentifier = isIdentifier;
             this.isOrderItem = isOrderItem;
             if (type.Equals(STRING_TYPE))

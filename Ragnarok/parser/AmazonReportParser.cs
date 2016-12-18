@@ -116,7 +116,12 @@ namespace Ragnarok
                 String identifier = row.SelectSingleNode("identifier").InnerText.Trim();
                 String type = row.SelectSingleNode("type").InnerText.Trim();
                 String everestColumnName = row.SelectSingleNode("everest-mapping-name").InnerText.Trim();
-                ParsingRule parsingRule = new ParsingRule(columnName, everestColumnName, type, orderItemSpecific.Equals("true"), identifier.Equals("true"));
+                String aggregateMappingName = null;
+                if (row["aggregate-mapping-name"] != null)
+                {
+                    aggregateMappingName = row.SelectSingleNode("aggregate-mapping-name").InnerText.Trim();
+                }
+                ParsingRule parsingRule = new ParsingRule(columnName, everestColumnName, aggregateMappingName, type, orderItemSpecific.Equals("true"), identifier.Equals("true"));
                 result.addParsingRule(parsingRule);
             }
             return result;

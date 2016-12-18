@@ -36,6 +36,31 @@ namespace Ragnarok.feeder.everest
                 convertAmazonModelToEverestModel(parsingRulesInfo, orderItem, everestOrderItem);
                 everestOrder.addOrderItem(everestOrderItem);
             }
+
+                foreach(ParsingRule parsingRule in parsingRulesInfo.ParsingRules.Values){
+                    if (parsingRule.AggregateMappingName == null)
+                    {
+                        continue;
+                    }
+                    if (parsingRule.ParsingType == ParsingType.DecimalType)
+                    {
+                        decimal aggregate = 0;
+                        foreach (OrderItem orderItem in everestOrder.OrderItems)
+                        {
+                            aggregate += orderItem.getDecimalValue(parsingRule.EverestColumnName);
+                        }
+                        everestOrder.putDecimalValue(parsingRule.AggregateMappingName, aggregate);
+                    }
+                    if (parsingRule.ParsingType == ParsingType.IntegerType)
+                    {
+                        int aggregate = 0;
+                        foreach (OrderItem orderItem in everestOrder.OrderItems)
+                        {
+                            aggregate += orderItem.getIntegerValue(parsingRule.EverestColumnName);
+                        }
+                        everestOrder.putIntegerValue(parsingRule.AggregateMappingName, aggregate);
+                    }
+            }
             return everestOrder;
         }
 
